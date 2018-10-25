@@ -1,7 +1,11 @@
 #include "RobotDynamics.h"
 #include <cmath>
 #include <iostream>
-RobotDynamics::RobotDynamics() { Reset(); }
+
+RobotDynamics::RobotDynamics() { 
+  Reset(); 
+}
+
 void RobotDynamics::Reset() {
   totalTime = 0;
   x = 0;
@@ -39,6 +43,7 @@ void RobotDynamics::CheckActuatorCommandQueue() {
     }
   }
 }
+
 void RobotDynamics::DoSimulationStep(float deltaT) {
   totalTime += deltaT;
 
@@ -46,28 +51,28 @@ void RobotDynamics::DoSimulationStep(float deltaT) {
 
   bool accelerate = v_want >= v_is;
 
-  // Acclerate to v_want
   if (accelerate) {
+    // Accelerate to v_want
     v_is += Acceleration * deltaT;
     if (v_is > v_want)
       v_is = v_want;
   } else {
+    // Decelerate to v_want
     v_is -= Acceleration * deltaT;
-    // Decclerate to v_want
     if (v_is < v_want)
       v_is = v_want;
   }
 
   bool angularAccelerate = w_want >= w_is;
 
-  // Acclerate to w_want
   if (angularAccelerate) {
+    // Accelerate to w_want
     w_is += AngularAcceleration * deltaT;
     if (w_is > w_want)
       w_is = w_want;
   } else {
+    // Decelerate to w_want
     w_is -= AngularAcceleration * deltaT;
-    // Decclerate to w_want
     if (w_is < w_want)
       w_is = w_want;
   }
@@ -81,6 +86,7 @@ void RobotDynamics::DoSimulationStep(float deltaT) {
   if (theta < -M_PI / 2)
     theta += M_PI;
 }
+
 void RobotDynamics::SendCommands(float linearVelocity, float angularVelocity) {
 
   std::pair<float, float> enqueItemLinearActuator =
